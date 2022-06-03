@@ -1,7 +1,17 @@
 using FlightStatusService.Infrastructure.Persistence;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Remove default logging providers
+builder.Logging.ClearProviders();
+// Serilog configuration        
+var logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
+// Register Serilog
+builder.Logging.AddSerilog(logger);
 
 // Add services to the container.
 
