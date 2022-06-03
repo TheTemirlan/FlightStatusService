@@ -26,11 +26,23 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<IdentityUser>, IAp
 
     public DbSet<Flight> Flights => Set<Flight>();
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        string adminRoleName = "admin";
+        string userRoleName = "user";
 
-        base.OnModelCreating(builder);
+        string adminEmail = "admin@mail.ru";
+        string adminPassword = "123456";
+
+        // Add roles
+        Role adminRole = new Role { Id = 1, Code = adminRoleName };
+        Role userRole = new Role { Id = 2, Code = userRoleName };
+        User adminUser = new User { Id = 1, Username = adminEmail, Password = adminPassword, RoleId = adminRole.Id };
+
+        modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, userRole });
+        modelBuilder.Entity<User>().HasData(new User[] { adminUser });
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        base.OnModelCreating(modelBuilder);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
