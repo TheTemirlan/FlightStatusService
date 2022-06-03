@@ -10,5 +10,6 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Flight, FlightDto>();
+        CreateMap<Enums.FlightStatus, Domain.Enums.FlightStatus>();
     }
 }
